@@ -1,0 +1,383 @@
+/* Google Fonts must be imported first */
+@import url('https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,400..900;1,6..96,400..900&family=Inter:wght@300;400;500;600&display=swap');
+
+@import "tailwindcss";
+
+/* =============================================
+   TYPOGRAPHY — De Valencia (Display) + Suisse Int'l (Body)
+   De Valencia → Cormorant Garamond (editorial serif, closest match)
+   Suisse Int'l → Inter (geometric sans-serif, closest web match)
+   ============================================= */
+
+:root {
+  /* ---- Brand Colors ---- */
+  --color-petrol:       #0F3D3E;   /* Verde petróleo */
+  --color-olive-dark:   #3B4A2F;   /* Verde oliva escuro */
+  --color-olive:        #556B2F;   /* Verde oliva */
+  --color-gold:         #C9A84C;   /* Dourado primário */
+  --color-gold-light:   #E8C96D;   /* Dourado claro */
+  --color-gold-pale:    #FCD54A;   /* Marquee gold */
+  --color-cream:        #F5F0E8;   /* Off-white quente */
+  --color-cream-deep:   #EDE8DC;   /* Cream mais profundo */
+  --color-dark:         #080E0E;   /* Fundo escuro base */
+  --color-dark-2:       #0A1515;   /* Fundo escuro secundário */
+  --color-dark-surface: #0D2020;   /* Surface em dark */
+  --color-text-primary: #F0EDE6;   /* Texto primário */
+  --color-text-muted:   #8A8F7A;   /* Texto auxiliar */
+  --color-border:       rgba(201, 168, 76, 0.2);
+
+  /* ---- Typography ---- */
+  --font-display: 'Bodoni Moda', 'Didot', serif;
+  --font-body:    'Inter', -apple-system, sans-serif;
+
+  /* ---- Spacing (8pt grid) ---- */
+  --space-1:  8px;
+  --space-2:  16px;
+  --space-3:  24px;
+  --space-4:  32px;
+  --space-5:  48px;
+  --space-6:  64px;
+  --space-7:  80px;
+  --space-8:  96px;
+  --space-9:  128px;
+  --space-10: 160px;
+
+  /* ---- Transitions ---- */
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-in-out: cubic-bezier(0.77, 0, 0.175, 1);
+}
+
+/* =============================================
+   RESET & BASE
+   ============================================= */
+
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  scroll-behavior: smooth;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
+
+body {
+  font-family: var(--font-body);
+  background-color: var(--color-dark);
+  color: var(--color-text-primary);
+  font-size: 16px;
+  line-height: 1.6;
+  overflow-x: hidden;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-display);
+  font-weight: 300;
+  color: var(--color-cream);
+}
+
+/* =============================================
+   TYPOGRAPHY CLASSES
+   ============================================= */
+
+.font-display { font-family: var(--font-display); }
+.font-body    { font-family: var(--font-body); }
+
+/* Display sizes */
+.text-display-xl {
+  font-family: var(--font-display);
+  font-size: clamp(3.5rem, 10vw, 10rem);
+  font-weight: 300;
+  line-height: 0.92;
+  letter-spacing: -0.02em;
+}
+
+.text-display-lg {
+  font-family: var(--font-display);
+  font-size: clamp(2.5rem, 7vw, 7rem);
+  font-weight: 300;
+  line-height: 0.95;
+  letter-spacing: -0.02em;
+}
+
+.text-display-md {
+  font-family: var(--font-display);
+  font-size: clamp(2rem, 5vw, 4.5rem);
+  font-weight: 400;
+  line-height: 1.0;
+  letter-spacing: -0.01em;
+}
+
+.text-display-sm {
+  font-family: var(--font-display);
+  font-size: clamp(1.5rem, 3vw, 2.5rem);
+  font-weight: 400;
+  line-height: 1.1;
+}
+
+.text-eyebrow {
+  font-family: var(--font-body);
+  font-size: 0.7rem;
+  font-weight: 500;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--color-gold);
+}
+
+/* Gold italic accent */
+.gold-italic {
+  font-style: italic;
+  color: var(--color-gold);
+}
+
+/* =============================================
+   COLOR UTILITIES
+   ============================================= */
+
+.bg-petrol      { background-color: var(--color-petrol); }
+.bg-olive-dark  { background-color: var(--color-olive-dark); }
+.bg-olive       { background-color: var(--color-olive); }
+.bg-gold        { background-color: var(--color-gold); }
+.bg-dark        { background-color: var(--color-dark); }
+.bg-dark-2      { background-color: var(--color-dark-2); }
+.bg-dark-surface { background-color: var(--color-dark-surface); }
+.bg-cream       { background-color: var(--color-cream); }
+
+.text-gold      { color: var(--color-gold); }
+.text-cream     { color: var(--color-cream); }
+.text-muted     { color: var(--color-text-muted); }
+.text-petrol    { color: var(--color-petrol); }
+.text-dark      { color: var(--color-dark); }
+
+/* =============================================
+   BUTTONS
+   ============================================= */
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--font-body);
+  font-size: 0.75rem;
+  font-weight: 500;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  padding: 14px 28px;
+  border: none;
+  cursor: pointer;
+  text-decoration: none;
+  transition: all 0.3s var(--ease-out);
+  position: relative;
+  overflow: hidden;
+}
+
+.btn-primary {
+  background: var(--color-gold);
+  color: var(--color-dark);
+}
+
+.btn-primary::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: var(--color-gold-light);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.btn-primary:hover::after {
+  opacity: 1;
+}
+
+.btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 40px rgba(201, 168, 76, 0.35);
+}
+
+.btn-ghost {
+  background: transparent;
+  color: var(--color-cream);
+  border: 1px solid rgba(245, 240, 232, 0.25);
+}
+
+.btn-ghost:hover {
+  border-color: var(--color-gold);
+  color: var(--color-gold);
+  transform: translateY(-2px);
+}
+
+.btn-gold-ghost {
+  background: transparent;
+  color: var(--color-gold);
+  border: 1px solid var(--color-gold);
+}
+
+.btn-gold-ghost:hover {
+  background: var(--color-gold);
+  color: var(--color-dark);
+  transform: translateY(-2px);
+}
+
+/* =============================================
+   SECTION TAG
+   ============================================= */
+
+.section-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 24px;
+}
+
+.section-tag::before {
+  content: '';
+  display: block;
+  width: 24px;
+  height: 1px;
+  background: var(--color-gold);
+}
+
+/* =============================================
+   DIVIDERS & LINES
+   ============================================= */
+
+.gold-line {
+  width: 36px;
+  height: 2px;
+  background: var(--color-gold);
+  transition: width 0.4s var(--ease-out);
+}
+
+/* =============================================
+   SCROLLBAR
+   ============================================= */
+
+::-webkit-scrollbar { width: 4px; }
+::-webkit-scrollbar-track { background: var(--color-dark-2); }
+::-webkit-scrollbar-thumb { background: var(--color-petrol); border-radius: 2px; }
+::-webkit-scrollbar-thumb:hover { background: var(--color-gold); }
+
+/* =============================================
+   SELECTION
+   ============================================= */
+
+::selection {
+  background: var(--color-gold);
+  color: var(--color-dark);
+}
+
+/* =============================================
+   MARQUEE
+   ============================================= */
+
+@keyframes marquee-scroll {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-50%); }
+}
+
+.marquee-track {
+  animation: marquee-scroll 25s linear infinite;
+  white-space: nowrap;
+  display: flex;
+  width: max-content;
+}
+
+/* =============================================
+   UTILITY ANIMATIONS
+   ============================================= */
+
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(24px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+@keyframes pulse-dot {
+  0%, 100% { transform: scale(1); opacity: 1; }
+  50%       { transform: scale(1.8); opacity: 0.5; }
+}
+
+@keyframes line-expand {
+  from { width: 0; }
+  to   { width: 100%; }
+}
+
+.animate-fade-up {
+  animation: fadeUp 0.7s var(--ease-out) both;
+}
+
+.animate-fade-in {
+  animation: fadeIn 0.5s ease both;
+}
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+  .marquee-track { animation: none; }
+}
+
+/* =============================================
+   GRAIN TEXTURE OVERLAY
+   ============================================= */
+
+.grain-overlay::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+  pointer-events: none;
+  opacity: 0.4;
+  z-index: 0;
+}
+
+/* =============================================
+   CONTAINERS
+   ============================================= */
+
+.container-site {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 0 clamp(20px, 5vw, 80px);
+}
+
+/* =============================================
+   CARD BASE
+   ============================================= */
+
+.card-base {
+  background: var(--color-dark-surface);
+  border: 1px solid rgba(201, 168, 76, 0.1);
+  position: relative;
+  overflow: hidden;
+  transition: border-color 0.3s ease, transform 0.3s var(--ease-out);
+}
+
+.card-base:hover {
+  border-color: rgba(201, 168, 76, 0.3);
+  transform: translateY(-4px);
+}
+
+.card-base::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  height: 2px;
+  width: 36px;
+  background: var(--color-gold);
+  transition: width 0.4s var(--ease-out);
+}
+
+.card-base:hover::after {
+  width: 72px;
+}
