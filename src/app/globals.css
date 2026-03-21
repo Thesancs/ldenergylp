@@ -401,3 +401,33 @@ h1, h2, h3, h4, h5, h6 {
 .card-base:hover::after {
   width: 72px;
 }
+
+/* =============================================
+   ISO CERTIFICATION CARDS (ESG Section)
+   ============================================= */
+
+.iso-card {
+  display: flex;
+  align-items: flex-start;
+  gap: 20px;
+  padding: 24px 0;
+}
+
+.iso-badge {
+  min-width: 90px;
+  padding: 10px 14px;
+  text-align: center;
+}
+
+.iso-title {
+  font-size: 0.85rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  margin-bottom: 6px;
+}
+
+.iso-desc {
+  font-size: 0.9rem;
+  line-height: 1.6;
+  opacity: 0.75;
+}

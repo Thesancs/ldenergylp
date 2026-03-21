@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useMemo } from "react";
+import { useEffect, useRef, useMemo, useState } from "react";
 import { motion, useScroll, useTransform, useInView } from "framer-motion";
 
 const certifications = [
@@ -56,14 +56,24 @@ const pillars = [
 
 // Helper for Background Particles
 const GoldenParticles = () => {
-  const particlesData = useMemo(() => Array.from({ length: 30 }).map((_, i) => ({
-    id: i,
-    x: Math.random() * 100,
-    size: Math.random() * 2 + 1,
-    duration: Math.random() * 10 + 15,
-    delay: Math.random() * 10,
-    opacity: Math.random() * 0.3 + 0.1,
-  })), []);
+  const [particlesData, setParticlesData] = useState<
+    { id: number; x: number; size: number; duration: number; delay: number; opacity: number }[]
+  >([]);
+
+  useEffect(() => {
+    setParticlesData(
+      Array.from({ length: 30 }).map((_, i) => ({
+        id: i,
+        x: Math.random() * 100,
+        size: Math.random() * 2 + 1,
+        duration: Math.random() * 10 + 15,
+        delay: Math.random() * 10,
+        opacity: Math.random() * 0.3 + 0.1,
+      }))
+    );
+  }, []);
+
+  if (particlesData.length === 0) return null;
 
   return (
     <div className="absolute inset-0 pointer-events-none overflow-hidden z-0">
@@ -76,7 +86,7 @@ const GoldenParticles = () => {
             width: p.size,
             height: p.size,
             opacity: p.opacity,
-            backgroundColor: "var(--color-gold)",
+            backgroundColor: "#C9A84C",
             filter: "blur(1px)",
           }}
           initial={{ top: "-5%" }}

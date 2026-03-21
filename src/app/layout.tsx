@@ -72,6 +72,7 @@ export default function RootLayout({
     <html 
       lang="pt-BR" 
       className={`${inter.variable} ${bodoni.variable} ${deValencia.variable}`}
+      suppressHydrationWarning
     >
       <head>
         <link rel="icon" href="/Logomarca.svg" type="image/svg+xml" />

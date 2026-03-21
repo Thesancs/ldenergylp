@@ -173,7 +173,7 @@ function ValueCard({ v, f, g, s, d }: CardProps) {
       <motion.div
         style={{
           width: useTransform(g, [0.05, 0.4], ["36px", "100%"]),
-          backgroundColor: useTransform(g, [0.05, 0.4], ["rgba(201,168,76,0.3)", "var(--color-gold)"])
+          backgroundColor: useTransform(g, [0.05, 0.4], ["rgba(201,168,76,0.3)", "#C9A84C"])
         }}
         className="absolute bottom-0 left-0 h-[2px]"
       />

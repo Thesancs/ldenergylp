@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef } from "react";
+import { useRef, useState, useEffect } from "react";
 import { motion, useScroll, useTransform, useSpring } from "framer-motion";
 
 export default function Hero() {
@@ -18,6 +18,25 @@ export default function Hero() {
     damping: 24,
     restDelta: 0.001
   });
+
+  const [videoSrc, setVideoSrc] = useState<string>("/2eab39b07c00970c55674f258d93b97c_1.webm");
+  
+  // Deteção responsiva para trocar o vídeo
+  useEffect(() => {
+    const checkMobile = () => {
+      // 1024px é o breakpoint comum para desktop no Next.js (lg)
+      const isMobile = window.innerWidth < 1024;
+      setVideoSrc(
+        isMobile 
+          ? "/0c091fd503429622d442a435bf94bef3_1.webm" 
+          : "/2eab39b07c00970c55674f258d93b97c_1.webm"
+      );
+    };
+
+    checkMobile();
+    window.addEventListener("resize", checkMobile);
+    return () => window.removeEventListener("resize", checkMobile);
+  }, []);
 
   // Transformações baseadas no progresso do scroll
   const videoBlur = useTransform(smoothProgress, [0, 0.6], ["blur(0px)", "blur(20px)"]);
@@ -65,6 +84,7 @@ export default function Hero() {
           }}
         >
           <video
+            key={videoSrc} // Key garante que o vídeo reinicie/troque a fonte corretamente
             autoPlay
             loop
             muted
@@ -75,7 +95,7 @@ export default function Hero() {
               objectFit: "cover",
             }}
           >
-            <source src="/2eab39b07c00970c55674f258d93b97c_1.webm" type="video/webm" />
+            <source src={videoSrc} type="video/webm" />
           </video>
         </motion.div>
 
