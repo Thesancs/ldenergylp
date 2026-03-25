@@ -186,7 +186,7 @@ function StepRow({ step, index, progress }: { step: any, index: number, progress
             <h3 className="font-display text-2xl md:text-5xl text-petrol leading-tight tracking-tight">
               {step.title}
             </h3>
-            <h4 className="text-sm md:text-lg font-medium text-gold italic">
+            <h4 className="text-xl md:text-xl font-medium text-gold italic leading-none md:leading-normal mt-1">
               {step.subtitle}
             </h4>
           </div>
