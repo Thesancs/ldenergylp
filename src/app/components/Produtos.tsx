@@ -122,13 +122,24 @@ function ProductCard({ product, index, smoothProgress }: ProductCardProps) {
       >
         <img src={product.image} alt={product.name} className="w-full h-full object-cover" loading="lazy" />
         <motion.div className="absolute inset-0 bg-gradient-to-t from-dark-2 via-dark-2/40 to-transparent pointer-events-none" style={{ opacity: textOpacity }} />
-        <motion.div className="absolute left-6 bottom-6 md:left-12 md:bottom-12 p-8 md:p-12 z-20 bg-dark-2/40 backdrop-blur-xl border border-white/10 rounded-[32px] max-w-[90%] md:max-w-2xl" style={{ opacity: textOpacity, y: textY }}>
-          <div className="inline-block px-6 py-2 rounded-full border border-gold/40 text-xs md:text-sm mb-6 bg-dark-2 text-gold font-body tracking-[0.2em] uppercase shadow-2xl">
-            {product.tag}
+        <motion.div 
+          className="absolute inset-0 flex flex-col items-center justify-center p-8 md:p-24 z-20 pointer-events-none" 
+          style={{ opacity: textOpacity, y: textY }}
+        >
+          {/* THE GLASS CONTAINER - SHARP AND RAW */}
+          <div className="bg-dark/20 backdrop-blur-3xl border border-white/10 rounded-sm p-8 md:p-20 w-[94%] md:w-[75%] max-w-4xl flex flex-col items-center shadow-[0_40px_100px_rgba(0,0,0,0.8)]">
+            
+            {/* THE TAG BADGE - INDUSTRIAL PREMIUM */}
+            <div className="inline-flex items-center justify-center border border-gold/30 bg-dark/60 px-10 py-5 md:px-20 md:py-8 mb-8 md:mb-14 rounded-none shadow-[0_0_50px_rgba(201,168,76,0.15)]">
+              <span className="text-[10px] md:text-sm font-body tracking-[0.35em] font-medium text-gold uppercase text-center leading-[1.6]">
+                {product.tag}
+              </span>
+            </div>
+            
+            <p className="text-sm md:text-xl font-body font-extralight leading-relaxed text-cream max-w-2xl tracking-wide opacity-90 text-center text-balance">
+              {product.description}
+            </p>
           </div>
-          <p className="text-xs md:text-base font-light leading-relaxed text-cream font-body text-balance">
-            {product.description}
-          </p>
         </motion.div>
       </motion.div>
     </>

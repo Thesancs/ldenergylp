@@ -5,18 +5,13 @@ import * as d3 from 'd3-geo';
 import { Loader2 } from 'lucide-react';
 import { motion } from 'framer-motion';
 
-const BRAZIL_GEOJSON_URL = 'https://raw.githubusercontent.com/codeforamerica/click_that_hood/master/public/data/brazil-states.geojson';
-
-// The user requested São Paulo, Bahia, and Espírito Santo
+const LOCAL_GEOJSON_PATH = '/brazil-states.json';
 const HIGHLIGHTED_STATES = ['Sergipe', 'Bahia', 'Espírito Santo'];
 
-type MapDataFeature = {
-  name: string;
-  isHighlighted: boolean;
-  path: string;
-  centroid: [number, number] | null;
-};
-
+/**
+ * Memoized single state path to avoid heavy re-renders
+ * Filters can be expensive on mobile; we use a simple blur instead.
+ */
 const StatePath = memo(({ path, isHighlighted, highlightIndex }: { path: string; isHighlighted: boolean; highlightIndex: number }) => {
   if (!isHighlighted) return (
     <path
@@ -34,11 +29,11 @@ const StatePath = memo(({ path, isHighlighted, highlightIndex }: { path: string;
       viewport={{ once: true }}
       transition={{ duration: 0.8, delay: highlightIndex * 0.3 + 0.4 }}
     >
-      {/* Simplified Glow Layer (Lower cost than Filter) */}
+      {/* Fallback glow layer */}
       <path
         d={path}
         fill="var(--color-gold)"
-        className="blur-[2px] opacity-20"
+        className="blur-[1px] opacity-20"
       />
       <path
         d={path}
@@ -56,9 +51,12 @@ export default function MapaBrasil() {
   const [geojson, setGeojson] = useState<any>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
-    // Cache map data in memory to avoid redundant fetches
+    setMounted(true);
+
+    // Cache to avoid multiple fetches per session
     const cachedData = (window as any)._brazilMapCache;
     if (cachedData) {
       setGeojson(cachedData);
@@ -66,9 +64,10 @@ export default function MapaBrasil() {
       return;
     }
 
-    fetch(BRAZIL_GEOJSON_URL)
+    // Fetch from local public directory for better speed and reliability
+    fetch(LOCAL_GEOJSON_PATH)
       .then(res => {
-        if (!res.ok) throw new Error('Failed to fetch map data');
+        if (!res.ok) throw new Error('Failed to load local map data');
         return res.json();
       })
       .then(data => {
@@ -77,8 +76,8 @@ export default function MapaBrasil() {
         setLoading(false);
       })
       .catch(err => {
-        console.error(err);
-        setError(err.message);
+        console.error("Map Load Error:", err);
+        setError("Não foi possível carregar o mapa.");
         setLoading(false);
       });
   }, []);
@@ -86,11 +85,11 @@ export default function MapaBrasil() {
   const { mapData } = useMemo(() => {
     if (!geojson || !geojson.features) return { mapData: [] };
     
-    // Create a projection that fits the ENTIRE Brazil map into an 800x800 SVG viewBox
+    // Smooth geometric projection
     const projection = d3.geoMercator().fitExtent([[30, 30], [770, 770]], geojson as any);
     const pathGenerator = d3.geoPath().projection(projection);
     
-    const data: MapDataFeature[] = geojson.features.map((feature: any) => {
+    const data = geojson.features.map((feature: any) => {
       const name = feature.properties.name;
       const path = pathGenerator(feature) || '';
       
@@ -98,7 +97,7 @@ export default function MapaBrasil() {
       try {
         const c = pathGenerator.centroid(feature);
         if (c && !isNaN(c[0]) && !isNaN(c[1])) centroid = c as [number, number];
-      } catch(e) { /* ignore */ }
+      } catch(e) {}
       
       return { name, path, centroid, isHighlighted: HIGHLIGHTED_STATES.includes(name) };
     });
@@ -106,11 +105,11 @@ export default function MapaBrasil() {
     return { mapData: data };
   }, [geojson]);
 
-  if (loading) {
+  if (!mounted || loading) {
     return (
       <div className="flex flex-col items-center justify-center p-12 min-h-[400px]">
         <Loader2 className="w-8 h-8 text-gold animate-spin mb-4" />
-        <p className="text-cream/50 text-[10px] tracking-widest uppercase">Processando Geografia...</p>
+        <p className="text-cream/50 text-[10px] tracking-widest uppercase">Mapeando Operações...</p>
       </div>
     );
   }
@@ -118,29 +117,33 @@ export default function MapaBrasil() {
   if (error) {
     return (
       <div className="flex flex-col items-center justify-center p-12 min-h-[400px] text-center">
-        <p className="text-red-400 font-medium mb-2">Erro ao carregar mapa</p>
-        <p className="text-xs text-cream/30">{error}</p>
+        <p className="text-red-400 font-medium mb-2">{error}</p>
+        <button 
+          onClick={() => window.location.reload()}
+          className="text-[9px] text-gold uppercase tracking-tighter underline"
+        >
+          Recarregar página
+        </button>
       </div>
     );
   }
 
   return (
-    <div className="w-full relative flex items-center justify-center" style={{ perspective: '1500px' }}>
+    <div className="w-full relative flex items-center justify-center overflow-hidden">
       <motion.div 
         className="w-full relative will-change-transform"
-        initial={{ rotateX: 45, rotateZ: -10, opacity: 0, scale: 0.9 }}
-        whileInView={{ rotateX: 25, rotateZ: -5, opacity: 1, scale: 1 }}
-        transition={{ duration: 1.5, ease: [0.16, 1, 0.3, 1] }}
-        style={{ transformStyle: 'preserve-3d' }}
+        initial={{ rotateX: 20, rotateZ: -5, opacity: 0, scale: 0.95 }}
+        whileInView={{ rotateX: 10, rotateZ: 0, opacity: 1, scale: 1 }}
+        transition={{ duration: 1.2, ease: [0.16, 1, 0.3, 1] }}
+        style={{ transformOrigin: 'center center' }}
       >
         <svg 
           viewBox="0 0 800 800" 
-          className="w-full h-auto drop-shadow-2xl"
+          className="w-full h-auto drop-shadow-xl"
           preserveAspectRatio="xMidYMid meet"
           shapeRendering="geometricPrecision"
         >
           <defs>
-            
             <linearGradient id="highlightGradient" x1="0%" y1="0%" x2="100%" y2="100%">
               <stop offset="0%" stopColor="#F9F295" />
               <stop offset="50%" stopColor="#E0AA3E" />
@@ -158,12 +161,12 @@ export default function MapaBrasil() {
               />
             ))}
  
-            {/* Draw labels and pins */}
-            {mapData.filter((d: any) => d.isHighlighted).map((d: any, i: number) => {
+            {/* Draw labels and pins for focus states */}
+            {mapData.filter((d: any) => d.isHighlighted).map((d: any) => {
               if (!d.centroid) return null;
               const hIndex = HIGHLIGHTED_STATES.indexOf(d.name);
  
-              // Manual adjustments for visual balance inside the rotated map
+              // Offset logic for manual balance
               let offsetX = 0;
               let offsetY = 0;
               if (d.name === "Espírito Santo") offsetX = 12;
@@ -175,17 +178,16 @@ export default function MapaBrasil() {
                   transform={`translate(${d.centroid[0] + offsetX}, ${d.centroid[1] + offsetY})`}
                 >
                   <motion.g
-                    initial={{ scale: 0, opacity: 0, y: 10 }}
-                    whileInView={{ scale: 1, opacity: 1, y: 0 }}
+                    initial={{ scale: 0, opacity: 0 }}
+                    whileInView={{ scale: 1, opacity: 1 }}
                     viewport={{ once: true }}
                     transition={{ 
                       type: "spring",
-                      stiffness: 200,
-                      damping: 20,
+                      stiffness: 150,
+                      damping: 18,
                       delay: hIndex * 0.3 + 0.8 
                     }}
                   >
-                    {/* Map Pin */}
                     <path 
                       d="M 0 0 C -2 -4 -5 -7 -5 -12 A 5 5 0 1 1 5 -12 C 5 -7 2 -4 0 0 Z" 
                       fill="var(--color-gold)" 
@@ -193,10 +195,11 @@ export default function MapaBrasil() {
                       strokeWidth={1} 
                     />
                     <text
-                      y={18}
+                      y={22}
                       textAnchor="middle"
                       fill="var(--color-cream)"
-                      className="text-[11px] font-bold uppercase tracking-wider"
+                      className="text-[14px] font-bold uppercase tracking-wider"
+                      style={{ textShadow: '0 2px 4px rgba(0,0,0,0.5)' }}
                     >
                       {d.name}
                     </text>
