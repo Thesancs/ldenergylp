@@ -14,15 +14,15 @@ import { ArrowRight } from "lucide-react";
 const PRODUCTS = [
   {
     id: "01",
-    name: "Óleo Combustível B1",
-    tag: "Alto Desempenho · Suporte Técnico",
+    name: " Óleo Combustível B1",
+    tag: " Alto Desempenho · Suporte Técnico",
     description: "Derivados de alto desempenho para indústrias, plantas energéticas e frotas de grande porte. Fornecimento com regularidade, eficiência logística e suporte técnico especializado.",
     image: "/products/Petroleob.webp",
     scatterPos: { top: "25%", left: "65%" },
   },
   {
     id: "02",
-    name: "Óleo Combustível APF",
+    name: " Óleo Combustível APF",
     tag: "Alto Poder Calorífico · Excelente Fluidez",
     description: "Combustível de alto poder calorífico, com excelente fluidez. Dispensa aquecimento, reduz manutenção e emite menos particulados. Alternativa eficiente a óleos pesados e viável para misturas com diesel.",
     image: "/products/apf 1.webp",
@@ -30,7 +30,7 @@ const PRODUCTS = [
   },
   {
     id: "03",
-    name: "Óleo Combustível APFX",
+    name: " Óleo Combustível APFX",
     tag: "Premium · Alto Desempenho Térmico",
     description: "Combustível líquido premium para queima em temperatura ambiente. Formado por hidrocarbonetos pesados, entrega alto desempenho térmico com PCS de ~10.100 kcal/kg. Ideal for operações que buscam eficiência, simplicidade e constância na queima.",
     image: "/products/apfx.webp",
