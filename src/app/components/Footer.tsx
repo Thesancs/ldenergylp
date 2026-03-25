@@ -1,5 +1,7 @@
 "use client";
 
+import Image from "next/image";
+
 const navLinks = [
   { label: "Início", href: "#inicio" },
   { label: "Sobre Nós", href: "#sobre" },
@@ -56,9 +58,11 @@ export default function Footer() {
               onMouseEnter={(e) => (e.currentTarget.style.opacity = "0.75")}
               onMouseLeave={(e) => (e.currentTarget.style.opacity = "1")}
             >
-              <img
+              <Image
                 src="/Logo-H.svg"
                 alt="LD Energy"
+                width={180}
+                height={64}
                 style={{
                   height: "64px",
                   width: "auto",

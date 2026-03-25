@@ -181,7 +181,7 @@ export default function Sobre() {
                     A LD Energy nasceu da crença de que energia de qualidade precisa chegar a quem realmente move o Brasil.
                     <br />
                     <br />
-                    Há <Counter value={20} /> anos no setor, construímos uma operação que vai da extração ao cliente final. Temos fontes próprias em São Paulo, Bahia e Espírito Santo. Distribuímos para indústrias que não podem parar, em regiões que o mercado tradicional muitas vezes ignora.
+                    Há <Counter value={20} /> anos no setor, construímos uma operação que vai da extração ao cliente final. Temos poços de extração de petróleo em Sergipe, Bahia e Espírito Santo. Distribuímos para indústrias que não podem parar, em regiões que o mercado tradicional muitas vezes ignora.
                     <br />
                     <br />
                     Nosso portfólio cobre o que o setor industrial precisa: Petróleo Bruto, Óleo Combustível B1, Biomassa, Lenha e Cavaco de Eucalipto. Cada produto entregue com rastreabilidade, consistência e responsabilidade técnica.

@@ -1,20 +1,22 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import MapaBrasil from "./MapaBrasil";
+import dynamic from "next/dynamic";
+
+const MapaBrasil = dynamic(() => import("./MapaBrasil"), { ssr: false });
 
 const states = [
   {
-    name: "São Paulo",
-    detail: "Poços de extração próprios",
+    name: "Sergipe",
+    detail: "Poços de extração de petróleo",
   },
   {
     name: "Espírito Santo",
-    detail: "Poços de extração próprios",
+    detail: "Poços de extração de petróleo",
   },
   {
     name: "Bahia",
-    detail: "Poços de extração próprios",
+    detail: "Poços de extração de petróleo",
   },
 ];
 
@@ -70,7 +72,7 @@ export default function Origens() {
           <div className="order-1 md:col-start-1 md:row-start-1 md:self-end">
             <div data-reveal style={{ opacity: 0, transform: "translateY(20px)", transition: "all 0.6s var(--ease-out)" }}>
               <div className="section-tag">
-                <span className="text-eyebrow">Fontes Próprias</span>
+                <span className="text-eyebrow">Poços de extração de petróleo</span>
               </div>
             </div>
             <div data-reveal style={{ opacity: 0, transform: "translateY(24px)", transition: "all 0.7s var(--ease-out)", marginBottom: "32px" }}>
@@ -89,9 +91,7 @@ export default function Origens() {
           <div data-reveal className="order-2 md:order-none md:col-start-2 md:row-start-1 md:row-span-2 flex flex-col justify-center items-center py-8 md:py-0" style={{ opacity: 0, transform: "translateY(32px)", transition: "all 0.8s var(--ease-out)", width: "100%", minHeight: "350px" }}>
             <div style={{ position: "relative", width: "100%", maxWidth: "550px", margin: "0 auto" }}>
               <MapaBrasil />
-              <p className="text-eyebrow" style={{ textAlign: "center", marginTop: "15px", opacity: 0.35 }}>
-                Fontes próprias no Brasil
-              </p>
+
             </div>
           </div>
 

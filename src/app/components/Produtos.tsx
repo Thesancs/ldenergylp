@@ -14,43 +14,27 @@ import { ArrowRight } from "lucide-react";
 const PRODUCTS = [
   {
     id: "01",
-    name: "Petróleo Bruto",
-    tag: "Extração Própria · SP, BA, ES",
-    description: "Extraído diretamente de poços próprios em São Paulo, Bahia e Espírito Santo. Comercializado com qualidade certificada e cadeia de custódia rastreável do poço à entrega.",
+    name: "Óleo Combustível B1",
+    tag: "Alto Desempenho · Suporte Técnico",
+    description: "Derivados de alto desempenho para indústrias, plantas energéticas e frotas de grande porte. Fornecimento com regularidade, eficiência logística e suporte técnico especializado.",
     image: "/products/Petroleob.webp",
-    scatterPos: { top: "15%", left: "60%" },
+    scatterPos: { top: "25%", left: "65%" },
   },
   {
     id: "02",
-    name: "Óleos Combustíveis",
-    tag: "Alto Desempenho · Suporte Técnico",
-    description: "Derivados de alto desempenho para indústrias, plantas energéticas e frotas de grande porte. Fornecimento com regularidade, eficiência logística e suporte técnico especializado.",
-    image: "/products/Combustivelb1.webp",
-    scatterPos: { top: "35%", left: "80%" },
+    name: "Óleo Combustível APF",
+    tag: "Alto Poder Calorífico · Excelente Fluidez",
+    description: "Combustível de alto poder calorífico, with excelente fluidez. Dispensa aquecimento, reduz manutenção e emite menos particulados. Alternativa eficiente a óleos pesados e viável para misturas com diesel.",
+    image: "/products/apf 1.webp",
+    scatterPos: { top: "50%", left: "80%" },
   },
   {
     id: "03",
-    name: "Biomassa",
-    tag: "Renovável · ESG · Redução de CO₂",
-    description: "Alternativa renovável e sustentável para indústrias que buscam reduzir sua pegada de carbono sem abrir mão de eficiência energética. Produção alinhada aos critérios ESG.",
-    image: "/products/biomassa.webp",
-    scatterPos: { top: "55%", left: "65%" },
-  },
-  {
-    id: "04",
-    name: "Cavaco de Eucalipto",
-    tag: "Eficiência · Base Renovável",
-    description: "O cavaco de eucalipto é uma fonte de bioenergia de altíssimo rendimento calorífico, ideal para caldeiras industriais que buscam sustentabilidade de ponta a ponta.",
-    image: "/products/CavacoE.webp",
-    scatterPos: { top: "75%", left: "85%" },
-  },
-  {
-    id: "05",
-    name: "Lenha de Eucalipto",
-    tag: "Manejo Florestal Sustentável",
-    description: "Provinda de áreas de reflorestamento com rigorosos padrões de manejo sustentável. Uma opção clássica otimizada para a indústria e o respeito ao meio ambiente.",
-    image: "/products/Eucalipto.webp",
-    scatterPos: { top: "85%", left: "55%" },
+    name: "Óleo Combustível APFX",
+    tag: "Premium · Alto Desempenho Térmico",
+    description: "Combustível líquido premium para queima em temperatura ambiente. Formado por hidrocarbonetos pesados, entrega alto desempenho térmico com PCS de ~10.100 kcal/kg. Ideal for operações que buscam eficiência, simplicidade e constância na queima.",
+    image: "/products/apfx.webp",
+    scatterPos: { top: "75%", left: "65%" },
   },
 ];
 
@@ -61,50 +45,40 @@ interface ProductCardProps {
 }
 
 function ProductCard({ product, index, smoothProgress }: ProductCardProps) {
-  const stepStart = 0.1 + index * 0.16;
-  const stepEnd = stepStart + 0.16;
+  const stepStart = 0.12 + index * 0.25;
+  const stepEnd = stepStart + 0.25;
   const isLast = index === PRODUCTS.length - 1;
 
-  // Use a strictly increasing range for the animation
-  // The initial stage is 0 to 0.08 (scattered)
-  // The hero stage starts at stepStart
-  const animRange = [0, 0.08, Math.max(0.081, stepStart - 0.05), stepStart, stepEnd, stepEnd + 0.08];
+  // Optimized range for 3 products on 500vh
+  const animRange = [0, 0.1, Math.max(0.11, stepStart - 0.08), stepStart, stepEnd, stepEnd + 0.08];
 
   const opacity = useTransform(smoothProgress, animRange, [1, 0, 0, 1, 1, isLast ? 1 : 0]);
   const topNum = useTransform(smoothProgress, animRange, [parseFloat(product.scatterPos.top), 110, 110, 50, 50, isLast ? 50 : -30]);
-  const leftNum = useTransform(smoothProgress, [0, 0.08, stepStart], [parseFloat(product.scatterPos.left), 50, 50]);
+  const leftNum = useTransform(smoothProgress, [0, 0.1, stepStart], [parseFloat(product.scatterPos.left), 50, 50]);
 
-  // Adjusted for 1:1 at the initial stage (0-0.08) - made even smaller (12 in instead of 22)
   const widthNum = useTransform(smoothProgress, animRange, [8, 8, 40, 85, 85, isLast ? 85 : 40]);
   const heightNum = useTransform(smoothProgress, animRange, [8, 8, 30, 65, 65, isLast ? 65 : 30]);
 
   const zIndex = useTransform(smoothProgress, [stepStart - 0.02, stepStart, stepEnd, stepEnd + 0.02], [5, 40, 40, 5]);
 
-  const textOpacity = useTransform(smoothProgress, [stepStart, stepStart + 0.05, stepEnd - 0.05, stepEnd], [0, 1, 1, isLast ? 1 : 0]);
-  const textY = useTransform(smoothProgress, [stepStart, stepStart + 0.05, stepEnd - 0.05, stepEnd], [30, 0, 0, isLast ? 0 : -30]);
-
-  // Use numeric values for clipPath
-  const clipPath = useMotionTemplate`inset(calc(${topNum}% - ${heightNum}vh / 2) calc(100% - ${leftNum}% - ${widthNum}vw / 2) calc(100% - ${topNum}% - ${heightNum}vh / 2) calc(${leftNum}% - ${widthNum}vw / 2) round 20px)`;
-
-  // Create combined width and height transforms that handle unit switching
-  const cardWidth = useTransform(widthNum, (v) => `${v}vw`);
-  const cardHeight = useTransform([smoothProgress, widthNum, heightNum], ([p, w, h]) => {
-    // Stage 0: Scattered - use vw for height to keep 1:1 aspect ratio
-    if ((p as number) <= 0.08) return `${w}vw`;
-    // Stage 1+: Animated/Hero - use vh for height for better screen fit
-    return `${h}vh`;
-  });
+  const textOpacity = useTransform(smoothProgress, [stepStart, stepStart + 0.08, stepEnd - 0.08, stepEnd], [0, 1, 1, isLast ? 1 : 0]);
+  const textY = useTransform(smoothProgress, [stepStart, stepStart + 0.08, stepEnd - 0.08, stepEnd], [30, 0, 0, isLast ? 0 : -30]);
 
   const titleBaseTop = "calc(50% - 32.5vh - 5vh)";
 
+  const clipPath = useMotionTemplate`inset(calc(${topNum}% - ${heightNum}vh / 2) calc(100% - ${leftNum}% - ${widthNum}vw / 2) calc(100% - ${topNum}% - ${heightNum}vh / 2) calc(${leftNum}% - ${widthNum}vw / 2) round 20px)`;
+
+  const cardWidth = useTransform(widthNum, (v) => `${v}vw`);
+  const cardHeight = useTransform([smoothProgress, widthNum, heightNum], ([p, w, h]) => {
+    if ((p as number) <= 0.1) return `${w}vw`;
+    return `${h}vh`;
+  });
+
   return (
     <>
-      <motion.div
-        className="absolute inset-0 pointer-events-none"
-        style={{ opacity: textOpacity, zIndex: 20 }}
-      >
+      <motion.div className="absolute inset-0 pointer-events-none" style={{ opacity: textOpacity, zIndex: 20 }}>
         <motion.h2
-          className="absolute w-full text-[10vw] md:text-[9vw] lg:text-[7.5vw] font-display font-medium uppercase tracking-tighter leading-none m-0 px-4 text-center whitespace-nowrap drop-shadow-[0_15px_40px_rgba(0,0,0,0.6)] text-cream"
+          className="absolute w-full text-[8vw] md:text-[9vw] lg:text-[7.5vw] font-display font-medium uppercase tracking-tighter leading-none m-0 px-4 text-center whitespace-nowrap drop-shadow-[0_15px_40px_rgba(0,0,0,0.6)] text-cream"
           style={{
             top: titleBaseTop,
             y: useTransform(textOpacity, [0, 1], [60, 0]),
@@ -117,15 +91,10 @@ function ProductCard({ product, index, smoothProgress }: ProductCardProps) {
 
       <motion.div
         className="absolute inset-0 pointer-events-none"
-        style={{
-          opacity: textOpacity,
-          zIndex: 45,
-          clipPath,
-          WebkitClipPath: clipPath
-        }}
+        style={{ opacity: textOpacity, zIndex: 45, clipPath, WebkitClipPath: clipPath }}
       >
         <motion.h2
-          className="absolute w-full text-[10vw] md:text-[9vw] lg:text-[7.5vw] font-display font-medium uppercase tracking-tighter leading-none m-0 px-4 text-center whitespace-nowrap drop-shadow-none text-gold"
+          className="absolute w-full text-[8vw] md:text-[9vw] lg:text-[7.5vw] font-display font-medium uppercase tracking-tighter leading-none m-0 px-4 text-center whitespace-nowrap drop-shadow-none text-gold"
           style={{
             top: titleBaseTop,
             y: useTransform(textOpacity, [0, 1], [60, 0]),
@@ -167,8 +136,8 @@ function ProductCard({ product, index, smoothProgress }: ProductCardProps) {
 }
 
 function PaginationDot({ s, smoothProgress }: { s: number, smoothProgress: MotionValue<number> }) {
-  const startRange = s === 0 ? 0 : 0.1 + (s - 1) * 0.16;
-  const endRange = s === 0 ? 0.1 : startRange + 0.16;
+  const startRange = s === 0 ? 0 : 0.12 + (s - 1) * 0.25;
+  const endRange = s === 0 ? 0.12 : startRange + 0.25;
   const dotActive = useTransform(smoothProgress, [startRange - 0.05, startRange, endRange - 0.05, endRange], [0, 1, 1, 0]);
 
   return (
@@ -195,15 +164,15 @@ export default function Produtos() {
 
   const smoothProgress = useSpring(scrollYProgress, { stiffness: 70, damping: 25, restDelta: 0.001 });
 
-  const introOpacity = useTransform(smoothProgress, [0, 0.08], [1, 0]);
-  const introY = useTransform(smoothProgress, [0, 0.08], [0, -60]);
+  const introOpacity = useTransform(smoothProgress, [0, 0.12], [1, 0]);
+  const introY = useTransform(smoothProgress, [0, 0.12], [0, -60]);
 
-  const finalBlackOpacity = useTransform(smoothProgress, [0.90, 0.94], [0, 1]);
-  const finalContentOpacity = useTransform(smoothProgress, [0.94, 0.98], [0, 1]);
-  const finalContentY = useTransform(smoothProgress, [0.94, 0.98], [60, 0]);
+  const finalBlackOpacity = useTransform(smoothProgress, [0.88, 0.92], [0, 1]);
+  const finalContentOpacity = useTransform(smoothProgress, [0.92, 0.96], [0, 1]);
+  const finalContentY = useTransform(smoothProgress, [0.92, 0.96], [60, 0]);
 
   return (
-    <section id="produtos" ref={containerRef} className="bg-dark-2 relative font-sans selection:bg-gold selection:text-dark" style={{ height: "800vh" }}>
+    <section id="produtos" ref={containerRef} className="bg-dark-2 relative font-sans selection:bg-gold selection:text-dark" style={{ height: "500vh" }}>
       <div className="absolute top-0 left-0 right-0 h-[1px] bg-gradient-to-r from-transparent via-gold/20 to-transparent z-50 pointer-events-none" />
 
       <div className="sticky top-0 left-0 w-full h-screen overflow-hidden pointer-events-none">
@@ -235,7 +204,7 @@ export default function Produtos() {
 
         {/* Pagination Dots */}
         <div className="absolute right-8 top-1/2 -translate-y-1/2 flex flex-col items-center gap-6 z-50 pointer-events-auto">
-          {[0, 1, 2, 3, 4, 5, 6].map((s) => (
+          {[0, 1, 2, 3, 4].map((s) => (
             <PaginationDot key={s} s={s} smoothProgress={smoothProgress} />
           ))}
         </div>

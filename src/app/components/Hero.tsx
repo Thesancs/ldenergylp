@@ -4,6 +4,10 @@ import { useRef, useState, useEffect } from "react";
 import { motion, useScroll, useTransform, useSpring } from "framer-motion";
 
 export default function Hero() {
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => {
+    setMounted(true);
+  }, []);
   const containerRef = useRef<HTMLDivElement>(null);
   
   // Controle de scroll na seção
@@ -83,20 +87,30 @@ export default function Hero() {
             backgroundColor: "var(--color-dark)",
           }}
         >
-          <video
-            key={videoSrc} // Key garante que o vídeo reinicie/troque a fonte corretamente
-            autoPlay
-            loop
-            muted
-            playsInline
-            style={{
-              width: "100%",
-              height: "100%",
-              objectFit: "cover",
-            }}
-          >
-            <source src={videoSrc} type="video/webm" />
-          </video>
+          {mounted && (
+            <>
+              {/* Desktop Video */}
+              <video
+                autoPlay
+                loop
+                muted
+                playsInline
+                className="hidden md:block w-full h-full object-cover"
+              >
+                <source src="/2eab39b07c00970c55674f258d93b97c_1.webm" type="video/webm" />
+              </video>
+              {/* Mobile Video */}
+              <video
+                autoPlay
+                loop
+                muted
+                playsInline
+                className="block md:hidden w-full h-full object-cover"
+              >
+                <source src="/0c091fd503429622d442a435bf94bef3_1 (1).webm" type="video/webm" />
+              </video>
+            </>
+          )}
         </motion.div>
 
         {/* ── OVERLAY DE COR (TRANSIÇÃO) ── */}

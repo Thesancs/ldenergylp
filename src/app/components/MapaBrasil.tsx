@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useEffect, useMemo, memo } from 'react';
 import * as d3 from 'd3-geo';
 import { Loader2 } from 'lucide-react';
 import { motion } from 'framer-motion';
@@ -8,7 +8,49 @@ import { motion } from 'framer-motion';
 const BRAZIL_GEOJSON_URL = 'https://raw.githubusercontent.com/codeforamerica/click_that_hood/master/public/data/brazil-states.geojson';
 
 // The user requested São Paulo, Bahia, and Espírito Santo
-const HIGHLIGHTED_STATES = ['São Paulo', 'Bahia', 'Espírito Santo'];
+const HIGHLIGHTED_STATES = ['Sergipe', 'Bahia', 'Espírito Santo'];
+
+type MapDataFeature = {
+  name: string;
+  isHighlighted: boolean;
+  path: string;
+  centroid: [number, number] | null;
+};
+
+const StatePath = memo(({ path, isHighlighted, highlightIndex }: { path: string; isHighlighted: boolean; highlightIndex: number }) => {
+  if (!isHighlighted) return (
+    <path
+      d={path}
+      fill="rgba(255, 255, 255, 0.05)"
+      stroke="rgba(201, 168, 76, 0.12)"
+      strokeWidth={0.8}
+    />
+  );
+
+  return (
+    <motion.g 
+      initial={{ opacity: 0 }}
+      whileInView={{ opacity: 1 }}
+      viewport={{ once: true }}
+      transition={{ duration: 0.8, delay: highlightIndex * 0.3 + 0.4 }}
+    >
+      {/* Simplified Glow Layer (Lower cost than Filter) */}
+      <path
+        d={path}
+        fill="var(--color-gold)"
+        className="blur-[2px] opacity-20"
+      />
+      <path
+        d={path}
+        fill="url(#highlightGradient)"
+        stroke="#FFFFFF"
+        strokeWidth={1.5}
+      />
+    </motion.g>
+  );
+});
+
+StatePath.displayName = "StatePath";
 
 export default function MapaBrasil() {
   const [geojson, setGeojson] = useState<any>(null);
@@ -16,12 +58,21 @@ export default function MapaBrasil() {
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
+    // Cache map data in memory to avoid redundant fetches
+    const cachedData = (window as any)._brazilMapCache;
+    if (cachedData) {
+      setGeojson(cachedData);
+      setLoading(false);
+      return;
+    }
+
     fetch(BRAZIL_GEOJSON_URL)
       .then(res => {
         if (!res.ok) throw new Error('Failed to fetch map data');
         return res.json();
       })
       .then(data => {
+        (window as any)._brazilMapCache = data;
         setGeojson(data);
         setLoading(false);
       })
@@ -32,21 +83,34 @@ export default function MapaBrasil() {
       });
   }, []);
 
-  const { pathGenerator, features } = useMemo(() => {
-    if (!geojson) return { pathGenerator: null, features: [] };
+  const { mapData } = useMemo(() => {
+    if (!geojson || !geojson.features) return { mapData: [] };
     
     // Create a projection that fits the ENTIRE Brazil map into an 800x800 SVG viewBox
     const projection = d3.geoMercator().fitExtent([[30, 30], [770, 770]], geojson as any);
     const pathGenerator = d3.geoPath().projection(projection);
     
-    return { pathGenerator, features: geojson.features || [] };
+    const data: MapDataFeature[] = geojson.features.map((feature: any) => {
+      const name = feature.properties.name;
+      const path = pathGenerator(feature) || '';
+      
+      let centroid: [number, number] | null = null;
+      try {
+        const c = pathGenerator.centroid(feature);
+        if (c && !isNaN(c[0]) && !isNaN(c[1])) centroid = c as [number, number];
+      } catch(e) { /* ignore */ }
+      
+      return { name, path, centroid, isHighlighted: HIGHLIGHTED_STATES.includes(name) };
+    });
+    
+    return { mapData: data };
   }, [geojson]);
 
   if (loading) {
     return (
       <div className="flex flex-col items-center justify-center p-12 min-h-[400px]">
-        <Loader2 className="w-10 h-10 text-gold animate-spin mb-4" />
-        <p className="text-cream/50 animate-pulse text-xs tracking-widest uppercase">Carregando mapa...</p>
+        <Loader2 className="w-8 h-8 text-gold animate-spin mb-4" />
+        <p className="text-cream/50 text-[10px] tracking-widest uppercase">Processando Geografia...</p>
       </div>
     );
   }
@@ -61,26 +125,21 @@ export default function MapaBrasil() {
   }
 
   return (
-    <div className="w-full relative flex items-center justify-center" style={{ perspective: '1200px' }}>
+    <div className="w-full relative flex items-center justify-center" style={{ perspective: '1500px' }}>
       <motion.div 
-        className="w-full relative"
-        initial={{ rotateX: 45, rotateZ: -15, opacity: 0, scale: 0.8 }}
+        className="w-full relative will-change-transform"
+        initial={{ rotateX: 45, rotateZ: -10, opacity: 0, scale: 0.9 }}
         whileInView={{ rotateX: 25, rotateZ: -5, opacity: 1, scale: 1 }}
-        viewport={{ once: true, amount: 0.3 }}
-        transition={{ duration: 2.2, ease: "easeOut" }}
+        transition={{ duration: 1.5, ease: [0.16, 1, 0.3, 1] }}
         style={{ transformStyle: 'preserve-3d' }}
       >
         <svg 
           viewBox="0 0 800 800" 
-          className="w-full h-auto drop-shadow-[0_30px_60px_rgba(0,0,0,0.5)]"
+          className="w-full h-auto drop-shadow-2xl"
           preserveAspectRatio="xMidYMid meet"
+          shapeRendering="geometricPrecision"
         >
           <defs>
-            {/* Glow filter for highlighted states */}
-            <filter id="glow-map" x="-20%" y="-20%" width="140%" height="140%">
-              <feGaussianBlur stdDeviation="6" result="blur" />
-              <feComposite in="SourceGraphic" in2="blur" operator="over" />
-            </filter>
             
             <linearGradient id="highlightGradient" x1="0%" y1="0%" x2="100%" y2="100%">
               <stop offset="0%" stopColor="#F9F295" />
@@ -90,119 +149,56 @@ export default function MapaBrasil() {
           </defs>
  
           <g>
-            {/* Draw non-highlighted states */}
-            {features.map((feature: any) => {
-              const name = feature.properties.name;
-              const isHighlighted = HIGHLIGHTED_STATES.includes(name);
-              const path = pathGenerator ? pathGenerator(feature) || '' : '';
-              
-              if (isHighlighted) return null;
- 
-              return (
-                <path
-                  key={`state-${name}`}
-                  d={path}
-                  fill="rgba(255, 255, 255, 0.05)"
-                  stroke="rgba(201, 168, 76, 0.12)"
-                  strokeWidth={0.8}
-                />
-              );
-            })}
- 
-            {/* Draw highlighted states */}
-            {features.map((feature: any) => {
-              const name = feature.properties.name;
-              const isHighlighted = HIGHLIGHTED_STATES.includes(name);
-              const path = pathGenerator ? pathGenerator(feature) || '' : '';
-              
-              if (!isHighlighted) return null;
- 
-              const highlightIndex = HIGHLIGHTED_STATES.indexOf(name);
- 
-              return (
-                <motion.g 
-                  key={`highlight-${name}`}
-                  initial={{ opacity: 0 }}
-                  whileInView={{ opacity: 1 }}
-                  viewport={{ once: true }}
-                  transition={{ duration: 1.2, delay: highlightIndex * 0.4 + 0.6 }}
-                >
-                  <path
-                    d={path}
-                    fill="var(--color-gold)"
-                    filter="url(#glow-map)"
-                    style={{ opacity: 0.35 }}
-                  />
-                  <path
-                    d={path}
-                    fill="url(#highlightGradient)"
-                    stroke="#FFFFFF"
-                    strokeWidth={1.5}
-                  />
-                </motion.g>
-              );
-            })}
+            {mapData.map((d: any) => (
+              <StatePath 
+                key={d.name} 
+                path={d.path} 
+                isHighlighted={d.isHighlighted} 
+                highlightIndex={HIGHLIGHTED_STATES.indexOf(d.name)} 
+              />
+            ))}
  
             {/* Draw labels and pins */}
-            {features.map((feature: any) => {
-              const name = feature.properties.name;
-              const isHighlighted = HIGHLIGHTED_STATES.includes(name);
-              
-              if (!isHighlighted || !pathGenerator) return null;
- 
-              const centroid = pathGenerator.centroid(feature);
-              if (!centroid || isNaN(centroid[0]) || isNaN(centroid[1])) return null;
- 
-              const highlightIndex = HIGHLIGHTED_STATES.indexOf(name);
+            {mapData.filter((d: any) => d.isHighlighted).map((d: any, i: number) => {
+              if (!d.centroid) return null;
+              const hIndex = HIGHLIGHTED_STATES.indexOf(d.name);
  
               // Manual adjustments for visual balance inside the rotated map
               let offsetX = 0;
               let offsetY = 0;
-              if (name === "Espírito Santo") offsetX = 12;
-              if (name === "Bahia") offsetY = -5;
+              if (d.name === "Espírito Santo") offsetX = 12;
+              if (d.name === "Bahia") offsetY = -5;
  
               return (
                 <g 
-                  key={`label-container-${name}`} 
-                  transform={`translate(${centroid[0] + offsetX}, ${centroid[1] + offsetY})`}
+                  key={`pin-${d.name}`} 
+                  transform={`translate(${d.centroid[0] + offsetX}, ${d.centroid[1] + offsetY})`}
                 >
                   <motion.g
-                    initial={{ opacity: 0, scale: 0, y: 15 }}
-                    whileInView={{ opacity: 1, scale: 1, y: 0 }}
+                    initial={{ scale: 0, opacity: 0, y: 10 }}
+                    whileInView={{ scale: 1, opacity: 1, y: 0 }}
                     viewport={{ once: true }}
                     transition={{ 
                       type: "spring",
                       stiffness: 200,
-                      damping: 15,
-                      delay: highlightIndex * 0.4 + 1.4 
+                      damping: 20,
+                      delay: hIndex * 0.3 + 0.8 
                     }}
                   >
                     {/* Map Pin */}
-                    <g transform="translate(0, -15)">
-                      <path 
-                        d="M 0 0 C -3 -6 -7 -10 -7 -16 A 7 7 0 1 1 7 -16 C 7 -10 3 -6 0 0 Z" 
-                        fill="var(--color-gold)" 
-                        stroke="#FFFFFF" 
-                        strokeWidth="1.5"
-                        filter="url(#glow-map)"
-                      />
-                      <circle cx="0" cy="-16" r="2" fill="#FFFFFF" />
-                    </g>
-
+                    <path 
+                      d="M 0 0 C -2 -4 -5 -7 -5 -12 A 5 5 0 1 1 5 -12 C 5 -7 2 -4 0 0 Z" 
+                      fill="var(--color-gold)" 
+                      stroke="#FFF" 
+                      strokeWidth={1} 
+                    />
                     <text
                       y={18}
                       textAnchor="middle"
                       fill="var(--color-cream)"
-                      style={{ 
-                        fontSize: '12px',
-                        fontWeight: '700',
-                        letterSpacing: '0.08em',
-                        textTransform: 'uppercase',
-                        textShadow: '0 4px 8px rgba(0,0,0,0.9)',
-                        fontFamily: 'var(--font-body)'
-                      }}
+                      className="text-[11px] font-bold uppercase tracking-wider"
                     >
-                      {name}
+                      {d.name}
                     </text>
                   </motion.g>
                 </g>
