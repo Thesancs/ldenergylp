@@ -18,7 +18,7 @@ const steps = [
     title: "Refino",
     subtitle: "Da refinaria, produtos de alta performance.",
     description:
-      "O petróleo bruto é levado à refinaria, onde é processado e transformado nos produtos que a indústria precisa. Desse processo saem o Óleo Combustível B1, o APF e o APFX. Derivados com padrões técnicos rigorosos, baixo teor de enxofre, alto poder calorífico e excelente estabilidade térmica para processos industriais de alta demanda.",
+      "O petróleo bruto é levado à refinaria, onde é processado e transformado nos produtos que a indústria precisa. Desse processo saem o Óleo Combustível B1, o BTE+ e o APFX. Derivados com padrões técnicos rigorosos, baixo teor de enxofre, alto poder calorífico e excelente estabilidade térmica para processos industriais de alta demanda.",
     bullets: [
       "Óleo Combustível B1",
       "Óleo Combustível APF",
