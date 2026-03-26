@@ -22,9 +22,9 @@ const PRODUCTS = [
   },
   {
     id: "02",
-    name: "Óleo Combustível APF",
+    name: "Óleo Combustível BTE+",
     tag: "· Alto Poder Calorífico · Excelente Fluidez",
-    description: "Combustível de alto poder calorífico, com excelente fluidez. Dispensa aquecimento, reduz manutenção e emite menos particulados. Alternativa eficiente a óleos pesados e viável para misturas com diesel.",
+    description: "Combustível de alto poder calorífico, baixo teor de enxofre e com excelente fluidez. Dispensa aquecimento, reduz manutenção e emite menos particulados. Alternativa eficiente a óleos pesados e viável para misturas com diesel.",
     image: "/products/apf 1.webp",
     scatterPos: { top: "50%", left: "80%" },
   },
