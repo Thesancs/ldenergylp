@@ -33,7 +33,7 @@ const steps = [
     title: "Distribuição",
     subtitle: "Entrega onde o Brasil mais precisa.",
     description:
-      "Com frota própria e os maiores centros de distribuição do Sudeste, a LD Energy leva os produtos refinados a nossa bases que fica localizada em Sp ou Bahia e de lá diretamente às indústrias que não podem parar. Com bases construídas com visão estratégica de logística, assim garantindo produto de qualidade com preço justo em qualquer lugar do brasil, cada cliente recebe o produto com rastreabilidade completa, no prazo e com suporte técnico especializado.",
+      "Com frota própria e os maiores centros de distribuição do Sudeste, a LD Energy leva os produtos refinados a nossa bases que fica localizada em São Paulo ou Bahia e de lá diretamente às indústrias que não podem parar. Com bases construídas com visão estratégica de logística, assim garantindo produto de qualidade com preço justo em qualquer lugar do brasil, cada cliente recebe o produto com rastreabilidade completa, no prazo e com suporte técnico especializado.",
     bullets: [
       "Distribuição nacional",
       "Logística própria",
