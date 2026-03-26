@@ -14,24 +14,24 @@ import { ArrowRight } from "lucide-react";
 const PRODUCTS = [
   {
     id: "01",
-    name: " Óleo Combustível B1",
-    tag: " Alto Desempenho · Suporte Técnico",
+    name: "Óleo Combustível B1",
+    tag: "· Alto Desempenho · Suporte Técnico",
     description: "Derivados de alto desempenho para indústrias, plantas energéticas e frotas de grande porte. Fornecimento com regularidade, eficiência logística e suporte técnico especializado.",
     image: "/products/Petroleob.webp",
     scatterPos: { top: "25%", left: "65%" },
   },
   {
     id: "02",
-    name: " Óleo Combustível APF",
-    tag: "Alto Poder Calorífico · Excelente Fluidez",
+    name: "Óleo Combustível APF",
+    tag: "· Alto Poder Calorífico · Excelente Fluidez",
     description: "Combustível de alto poder calorífico, com excelente fluidez. Dispensa aquecimento, reduz manutenção e emite menos particulados. Alternativa eficiente a óleos pesados e viável para misturas com diesel.",
     image: "/products/apf 1.webp",
     scatterPos: { top: "50%", left: "80%" },
   },
   {
     id: "03",
-    name: " Óleo Combustível APFX",
-    tag: "Premium · Alto Desempenho Térmico",
+    name: "Óleo Combustível APFX",
+    tag: "· Premium · Alto Desempenho Térmico",
     description: "Combustível líquido premium para queima em temperatura ambiente. Formado por hidrocarbonetos pesados, entrega alto desempenho térmico com PCS de ~10.100 kcal/kg. Ideal for operações que buscam eficiência, simplicidade e constância na queima.",
     image: "/products/apfx.webp",
     scatterPos: { top: "75%", left: "65%" },
@@ -122,20 +122,20 @@ function ProductCard({ product, index, smoothProgress }: ProductCardProps) {
       >
         <img src={product.image} alt={product.name} className="w-full h-full object-cover" loading="lazy" />
         <motion.div className="absolute inset-0 bg-gradient-to-t from-dark-2 via-dark-2/40 to-transparent pointer-events-none" style={{ opacity: textOpacity }} />
-        <motion.div 
-          className="absolute inset-0 flex flex-col items-center justify-center p-8 md:p-24 z-20 pointer-events-none" 
+        <motion.div
+          className="absolute inset-0 flex flex-col items-center justify-center p-8 md:p-24 z-20 pointer-events-none"
           style={{ opacity: textOpacity, y: textY }}
         >
-          {/* THE GLASS CONTAINER - SHARP AND RAW */}
-          <div className="bg-dark/20 backdrop-blur-3xl border border-white/10 rounded-sm p-8 md:p-20 w-[94%] md:w-[75%] max-w-4xl flex flex-col items-center shadow-[0_40px_100px_rgba(0,0,0,0.8)]">
-            
+          {/* THE GLASS CONTAINER - SHARP BUT DARKER AS BEFORE */}
+          <div className="bg-dark-2/60 backdrop-blur-3xl border border-white/10 rounded-sm p-8 md:p-20 w-[94%] md:w-[75%] max-w-4xl flex flex-col items-center shadow-[0_40px_100px_rgba(0,0,0,0.8)]">
+
             {/* THE TAG BADGE - INDUSTRIAL PREMIUM */}
-            <div className="inline-flex items-center justify-center border border-gold/30 bg-dark/60 px-10 py-5 md:px-20 md:py-8 mb-8 md:mb-14 rounded-none shadow-[0_0_50px_rgba(201,168,76,0.15)]">
+            <div className="inline-flex items-center justify-center border border-gold/30 bg-dark-2 px-10 py-5 md:px-20 md:py-8 mb-8 md:mb-14 rounded-none shadow-[0_0_50px_rgba(201,168,76,0.15)]">
               <span className="text-[10px] md:text-sm font-body tracking-[0.35em] font-medium text-gold uppercase text-center leading-[1.6]">
                 {product.tag}
               </span>
             </div>
-            
+
             <p className="text-sm md:text-xl font-body font-extralight leading-relaxed text-cream max-w-2xl tracking-wide opacity-90 text-center text-balance">
               {product.description}
             </p>
