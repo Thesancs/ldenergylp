@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { ArrowRight, Send, CheckCircle } from "lucide-react";
+import { Send, CheckCircle } from "lucide-react";
 
 export default function CTAContato() {
   const sectionRef = useRef<HTMLDivElement>(null);
@@ -101,10 +101,15 @@ export default function CTAContato() {
               >
                 {[
                   { label: "E-mail", value: "contato@ldenergy.com.br" },
+                  { label: "Telefone", value: "(11) 97243-9222" },
                   { label: "Site", value: "www.ldenergy.com.br" },
                   {
-                    label: "Endereço",
-                    value: "Av. Andrômeda, 885 – Sala 1601\nComplexo Comercial Brascan",
+                    label: "Matriz e Escritório",
+                    value: "Conjunto Comercial Brascan\nAv. Andrômeda, 885 andar cj 1601 - Torre B\nBarueri – SP, CEP: 06473-000",
+                  },
+                  {
+                    label: "Base SP",
+                    value: "Av. Roberto Pinto Sobrinho, 301 - Parque Industrial Mazzei\nOsasco - SP, 06268-120",
                   },
                 ].map((item, i) => (
                   <div key={i}>

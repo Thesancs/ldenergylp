@@ -10,7 +10,7 @@ import {
   useMotionTemplate
 } from "motion/react";
 import { ArrowRight } from "lucide-react";
-
+import Image from "next/image";
 const PRODUCTS = [
   {
     id: "01",
@@ -120,7 +120,7 @@ function ProductCard({ product, index, smoothProgress }: ProductCardProps) {
           willChange: "transform, width, height, opacity",
         }}
       >
-        <img src={product.image} alt={product.name} className="w-full h-full object-cover" loading="lazy" />
+        <Image src={product.image} alt={product.name} fill sizes="(max-width: 768px) 100vw, 85vw" className="object-cover" />
         <motion.div className="absolute inset-0 bg-gradient-to-t from-dark-2 via-dark-2/40 to-transparent pointer-events-none" style={{ opacity: textOpacity }} />
         <motion.div
           className="absolute inset-0 flex flex-col items-center justify-center p-8 md:p-24 z-20 pointer-events-none"
@@ -190,7 +190,7 @@ export default function Produtos() {
         {/* Intro */}
         <motion.div style={{ opacity: introOpacity, y: introY }} className="absolute top-1/2 left-[5%] md:left-[10%] -translate-y-1/2 max-w-4xl z-10 px-4">
           <div className="section-tag mb-8"><span className="text-eyebrow text-gold">Portfólio Energético</span></div>
-          <h1 className="text-display-lg text-cream mb-8">Fontes de Energia para um <em className="gold-italic pr-4">Futuro Sustentável.</em></h1>
+          <h2 className="text-display-lg text-cream mb-8">Fontes de Energia para um <em className="gold-italic pr-4">Futuro Sustentável.</em></h2>
           <p className="font-body text-lg md:text-2xl font-light text-cream max-w-3xl text-balance leading-relaxed">
             Desde fontes tradicionais até soluções renováveis, fornecemos alternativas estratégicas que combinam eficiência, custo-benefício e menor impacto ambiental.
           </p>
@@ -206,7 +206,7 @@ export default function Produtos() {
         {/* Final Ending */}
         <motion.div className="absolute inset-0 bg-black z-[60]" style={{ opacity: finalBlackOpacity }} />
         <motion.div className="absolute inset-0 z-[70] flex flex-col items-center justify-center p-8 text-center" style={{ opacity: finalContentOpacity, y: finalContentY }}>
-          <h2 className="text-display-xl text-cream mb-10 font-display uppercase tracking-tighter leading-none m-0 shadow-gold">A energia que <br /><em className="gold-italic pr-4">move</em> o brasil.</h2>
+          <h2 className="text-display-xl text-cream mb-10 font-display uppercase tracking-tighter leading-none m-0 drop-shadow-[0_15px_40px_rgba(0,0,0,0.6)]">A energia que <br /><em className="gold-italic pr-4">move</em> o brasil.</h2>
           <div className="w-[1px] h-16 bg-gold mt-12 mb-10 opacity-40 shadow-[0_0_15px_rgba(201,168,76,0.5)]" />
           <a href="#contato" className="btn btn-primary px-12 py-5 text-base mt-8 pointer-events-auto transform hover:scale-105 transition-all">
             Falar com um especialista <ArrowRight size={20} className="ml-2" />

@@ -9,6 +9,7 @@ export default function Hero() {
     setMounted(true);
   }, []);
   const containerRef = useRef<HTMLDivElement>(null);
+  const videoRef = useRef<HTMLVideoElement>(null);
   
   // Controle de scroll na seção
   const { scrollYProgress } = useScroll({
@@ -42,6 +43,16 @@ export default function Hero() {
     return () => window.removeEventListener("resize", checkMobile);
   }, []);
 
+  useEffect(() => {
+    if (videoRef.current) {
+      videoRef.current.load();
+      const playPromise = videoRef.current.play();
+      if (playPromise !== undefined) {
+        playPromise.catch((error) => console.log("Safari autoPlay blocked:", error));
+      }
+    }
+  }, [videoSrc]);
+
   // Transformações baseadas no progresso do scroll
   const videoBlur = useTransform(smoothProgress, [0, 0.6], ["blur(0px)", "blur(20px)"]);
   const videoOpacity = useTransform(smoothProgress, [0, 0.8], [1, 0.2]);
@@ -63,6 +74,7 @@ export default function Hero() {
         backgroundColor: "var(--color-petrol)", // Fundo base agora é o verde petróleo
       }}
     >
+      <h1 className="sr-only">LD Energy - Soluções em Óleos Combustíveis e Sustentabilidade</h1>
       <div
         style={{
           position: "sticky",
@@ -87,30 +99,15 @@ export default function Hero() {
             backgroundColor: "var(--color-dark)",
           }}
         >
-          {mounted && (
-            <>
-              {/* Desktop Video */}
-              <video
-                autoPlay
-                loop
-                muted
-                playsInline
-                className="hidden md:block w-full h-full object-cover"
-              >
-                <source src="/2eab39b07c00970c55674f258d93b97c_1.webm" type="video/webm" />
-              </video>
-              {/* Mobile Video */}
-              <video
-                autoPlay
-                loop
-                muted
-                playsInline
-                className="block md:hidden w-full h-full object-cover"
-              >
-                <source src="/0c091fd503429622d442a435bf94bef3_1 (1).webm" type="video/webm" />
-              </video>
-            </>
-          )}
+          <video
+            ref={videoRef}
+            src={videoSrc}
+            autoPlay
+            loop
+            muted
+            playsInline
+            className="w-full h-full object-cover"
+          />
         </motion.div>
 
         {/* ── OVERLAY DE COR (TRANSIÇÃO) ── */}

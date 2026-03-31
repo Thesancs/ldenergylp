@@ -2,7 +2,7 @@
 
 import { useEffect, useRef } from "react";
 import { ArrowRight } from "lucide-react";
-import { motion, useScroll, useTransform, useMotionValue, useInView, animate } from "framer-motion";
+import { motion, useTransform, useMotionValue, useInView, animate } from "framer-motion";
 
 function Counter({ value }: { value: number }) {
   const count = useMotionValue(0);

@@ -132,9 +132,12 @@ export default function Footer() {
             </p>
             {[
               "contato@ldenergy.com.br",
+              "(11) 97243-9222",
               "www.ldenergy.com.br",
-              "Av. Andrômeda, 885 – Sala 1601",
-              "Complexo Comercial Brascan",
+              "Matriz: Conjunto Comercial Brascan",
+              "Av. Andrômeda 885, Barueri - SP",
+              "Base SP: Parque Industrial Mazzei",
+              "Av. Roberto P. Sobrinho 301, Osasco - SP"
             ].map((line, i) => (
               <p
                 key={i}

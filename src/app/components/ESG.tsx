@@ -57,24 +57,21 @@ const pillars = [
 // Helper for Background Particles
 const GoldenParticles = () => {
   const [mounted, setMounted] = useState(false);
+  const [particlesData, setParticlesData] = useState<any[]>([]);
   
   useEffect(() => {
     setMounted(true);
-  }, []);
-
-  const particlesData = useMemo(() => {
-    if (!mounted) return [];
-    return Array.from({ length: 30 }).map((_, i) => ({
+    setParticlesData(Array.from({ length: 30 }).map((_, i) => ({
       id: i,
       x: Math.random() * 100,
       size: Math.random() * 2 + 1,
       duration: Math.random() * 10 + 15,
       delay: Math.random() * 10,
       opacity: Math.random() * 0.3 + 0.1,
-    }));
-  }, [mounted]);
+    })));
+  }, []);
 
-  if (!mounted) return null;
+  if (!mounted || particlesData.length === 0) return null;
 
   return (
     <div className="absolute inset-0 pointer-events-none overflow-hidden z-0">

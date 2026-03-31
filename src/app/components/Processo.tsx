@@ -1,7 +1,7 @@
 "use client";
 
-import { useRef } from "react";
-import { motion, useScroll, useTransform } from "motion/react";
+import { useRef, useEffect } from "react";
+import { motion, useScroll, useTransform, useInView } from "framer-motion";
 
 const steps = [
   {
@@ -51,9 +51,6 @@ export default function Processo() {
     target: containerRef,
     offset: ["start center", "end center"],
   });
-
-  // Calculate the height of the oil line based on scroll
-  const lineHeight = useTransform(scrollYProgress, [0, 1], ["0%", "100%"]);
 
   return (
     <section 
@@ -144,8 +141,22 @@ function StepRow({ step, index, progress }: { step: any, index: number, progress
     [1, 1.4, 1]
   );
 
+  const ref = useRef<HTMLDivElement>(null);
+  const isInView = useInView(ref, { once: true, margin: "200px" });
+
+  const videoRef = useRef<HTMLVideoElement>(null);
+
+  useEffect(() => {
+    if (isInView && videoRef.current) {
+      const playPromise = videoRef.current.play();
+      if (playPromise !== undefined) {
+        playPromise.catch((e) => console.log("Safari autoPlay block:", e));
+      }
+    }
+  }, [isInView]);
+
   return (
-    <div className={`relative flex flex-col md:flex-row items-center justify-center w-full min-h-[40vh]`}>
+    <div ref={ref} className={`relative flex flex-col md:flex-row items-center justify-center w-full min-h-[40vh]`}>
       
       {/* Node indicator attached to the track - Hidden on Mobile/Tablet */}
       <motion.div 
@@ -168,9 +179,10 @@ function StepRow({ step, index, progress }: { step: any, index: number, progress
           {/* Video */}
           <div className="mb-4">
             <video 
+              ref={videoRef}
               src={step.video} 
               className="w-full h-auto max-w-[120px] md:max-w-[140px] mix-blend-multiply" 
-              autoPlay 
+              preload="none"
               muted 
               loop 
               playsInline
