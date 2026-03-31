@@ -184,7 +184,7 @@ export default function Sobre() {
                     Há <Counter value={20} /> anos no setor, construímos uma operação que vai da extração ao cliente final. Temos poços de extração de petróleo em Sergipe, Bahia e Espírito Santo. Distribuímos para indústrias que não podem parar, em regiões que o mercado tradicional muitas vezes ignora.
                     <br />
                     <br />
-                    Nosso portfólio cobre o que o setor industrial precisa: Petróleo Bruto, Óleo Combustível B1, Biomassa, Lenha e Cavaco de Eucalipto. Cada produto entregue com rastreabilidade, consistência e responsabilidade técnica.
+                    Nosso portfólio cobre o que o setor industrial precisa: Óleo Combustível B1, Óleo combustivel BTE+, Óleo combustível APFX. Cada produto entregue com rastreabilidade, consistência e responsabilidade técnica.
                 </p>
                 </div>
 
