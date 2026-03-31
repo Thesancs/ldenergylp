@@ -1,15 +1,10 @@
 "use client";
 
-import { useRef, useState, useEffect } from "react";
+import { useRef, useEffect } from "react";
 import { motion, useScroll, useTransform, useSpring } from "framer-motion";
 
 export default function Hero() {
-  const [mounted, setMounted] = useState(false);
-  useEffect(() => {
-    setMounted(true);
-  }, []);
   const containerRef = useRef<HTMLDivElement>(null);
-  const videoRef = useRef<HTMLVideoElement>(null);
   
   // Controle de scroll na seção
   const { scrollYProgress } = useScroll({
@@ -24,34 +19,7 @@ export default function Hero() {
     restDelta: 0.001
   });
 
-  const [videoSrc, setVideoSrc] = useState<string>("/2eab39b07c00970c55674f258d93b97c_1.webm");
-  
-  // Deteção responsiva para trocar o vídeo
-  useEffect(() => {
-    const checkMobile = () => {
-      // 1024px é o breakpoint comum para desktop no Next.js (lg)
-      const isMobile = window.innerWidth < 1024;
-      setVideoSrc(
-        isMobile 
-          ? "/0c091fd503429622d442a435bf94bef3_1.webm" 
-          : "/2eab39b07c00970c55674f258d93b97c_1.webm"
-      );
-    };
 
-    checkMobile();
-    window.addEventListener("resize", checkMobile);
-    return () => window.removeEventListener("resize", checkMobile);
-  }, []);
-
-  useEffect(() => {
-    if (videoRef.current) {
-      videoRef.current.load();
-      const playPromise = videoRef.current.play();
-      if (playPromise !== undefined) {
-        playPromise.catch((error) => console.log("Safari autoPlay blocked:", error));
-      }
-    }
-  }, [videoSrc]);
 
   // Transformações baseadas no progresso do scroll
   const videoBlur = useTransform(smoothProgress, [0, 0.6], ["blur(0px)", "blur(20px)"]);
@@ -99,15 +67,18 @@ export default function Hero() {
             backgroundColor: "var(--color-dark)",
           }}
         >
+          {/* Usando media queries HTML5 nativos para o navegador baixar apenas 1 vídeo, sem hidratação JS! */}
           <video
-            ref={videoRef}
-            src={videoSrc}
             autoPlay
             loop
             muted
             playsInline
             className="w-full h-full object-cover"
-          />
+          >
+            <source src="/0c091fd503429622d442a435bf94bef3_1.webm" media="(max-width: 1023px)" />
+            <source src="/2eab39b07c00970c55674f258d93b97c_1.webm" media="(min-width: 1024px)" />
+            <source src="/2eab39b07c00970c55674f258d93b97c_1.webm" /> {/* Fallback absoluto */}
+          </video>
         </motion.div>
 
         {/* ── OVERLAY DE COR (TRANSIÇÃO) ── */}
