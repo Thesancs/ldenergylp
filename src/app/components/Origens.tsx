@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import dynamic from "next/dynamic";
+import { useInView } from "framer-motion";
 
 const MapaBrasil = dynamic(() => import("./MapaBrasil"), { ssr: false });
 
@@ -23,6 +24,8 @@ const states = [
 export default function Origens() {
   const sectionRef = useRef<HTMLDivElement>(null);
   const [active, setActive] = useState<number | null>(null);
+
+  const isInView = useInView(sectionRef, { margin: "200px", once: true });
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -90,7 +93,7 @@ export default function Origens() {
 
           <div data-reveal className="order-2 md:order-none md:col-start-2 md:row-start-1 md:row-span-2 flex flex-col justify-center items-center py-8 md:py-0" style={{ opacity: 0, transform: "translateY(32px)", transition: "all 0.8s var(--ease-out)", width: "100%", minHeight: "350px" }}>
             <div style={{ position: "relative", width: "100%", maxWidth: "550px", margin: "0 auto" }}>
-              <MapaBrasil />
+              {isInView && <MapaBrasil />}
 
             </div>
           </div>

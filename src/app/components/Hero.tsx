@@ -77,7 +77,6 @@ export default function Hero() {
           >
             <source src="/0c091fd503429622d442a435bf94bef3_1.webm" media="(max-width: 1023px)" />
             <source src="/2eab39b07c00970c55674f258d93b97c_1.webm" media="(min-width: 1024px)" />
-            <source src="/2eab39b07c00970c55674f258d93b97c_1.webm" /> {/* Fallback absoluto */}
           </video>
         </motion.div>
 
