@@ -1,15 +1,15 @@
 "use client";
 
-import { useRef, useEffect } from "react";
-import { motion, useScroll, useTransform, useSpring } from "framer-motion";
+import { useRef, useEffect, useState } from "react";
+import { motion, useScroll, useTransform, useSpring, useMotionValueEvent } from "framer-motion";
 
 export default function Hero() {
   const containerRef = useRef<HTMLDivElement>(null);
   
-  // Controle de scroll na seção
+  // Controle de scroll na seção (corrigido para evitar salto imediato no carregamento)
   const { scrollYProgress } = useScroll({
     target: containerRef,
-    offset: ["start start", "end end"]
+    offset: ["start start", "end start"]
   });
 
   // Suavização do movimento
@@ -18,6 +18,31 @@ export default function Hero() {
     damping: 24,
     restDelta: 0.001
   });
+
+  const videoRef = useRef<HTMLVideoElement>(null);
+  const [videoSrc, setVideoSrc] = useState<string>("");
+  const [isVideoLoaded, setIsVideoLoaded] = useState(false);
+
+  // 1. Detectar o dispositivo no carregamento da página
+  useEffect(() => {
+    const isMobile = window.innerWidth < 1024;
+    setVideoSrc(isMobile ? "/ldwebcel.webm" : "/ldwebpc.webm");
+  }, []);
+
+  // 2. Tentar forçar o disparo do vídeo se autoplay falhar
+  useEffect(() => {
+    if (videoSrc && videoRef.current) {
+        setIsVideoLoaded(true); // Garante visibilidade imediata agora
+        videoRef.current.load();
+        videoRef.current.play().catch(err => 
+            console.log("Aguardando interação:", err)
+        );
+    }
+  }, [videoSrc]);
+
+  const handleLoadedMetadata = () => {
+    setIsVideoLoaded(true);
+  };
 
 
 
@@ -37,7 +62,7 @@ export default function Hero() {
       ref={containerRef}
       id="inicio"
       style={{
-        height: "180vh", // Aumentado para uma transição mais longa e suave
+        height: "110vh", // Pequena margem extra para o scroll-driven animation não colapsar
         position: "relative",
         backgroundColor: "var(--color-petrol)", // Fundo base agora é o verde petróleo
       }}
@@ -69,14 +94,20 @@ export default function Hero() {
         >
           {/* Usando media queries HTML5 nativos para o navegador baixar apenas 1 vídeo, sem hidratação JS! */}
           <video
+            ref={videoRef}
+            key={videoSrc}
             autoPlay
             loop
             muted
             playsInline
+            preload="auto"
             className="w-full h-full object-cover"
+            style={{
+              opacity: videoSrc ? 1 : 0,
+              transition: "opacity 0.8s ease-in-out"
+            }}
           >
-            <source src="/0c091fd503429622d442a435bf94bef3_1.webm" media="(max-width: 1023px)" />
-            <source src="/2eab39b07c00970c55674f258d93b97c_1.webm" media="(min-width: 1024px)" />
+            <source src={videoSrc || "/ldwebpc.webm"} type="video/webm" />
           </video>
         </motion.div>
 
@@ -94,6 +125,9 @@ export default function Hero() {
 
 
         {/* Blur Transition Strips removed as we now use solid color fade */}
+
+
+        {/* ── CONTEÚDO PRINCIPAL REMOVIDO DAQUI ── */}
 
         {/* ── INDICADOR DE SCROLL (MAIS VISÍVEL) ── */}
         <motion.div

@@ -14,11 +14,21 @@ const navItems = [
 
 export default function Navbar() {
   const [scrolled, setScrolled] = useState(false);
+  const [isVisible, setIsVisible] = useState(true);
   const [menuOpen, setMenuOpen] = useState(false);
   const sidebarRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    const handleScroll = () => setScrolled(window.scrollY > 40);
+    const handleScroll = () => {
+      const scrollY = window.scrollY;
+      const heroHeight = window.innerHeight * 1.6; // Valor aproximado do fim do Hero (180vh)
+      
+      setScrolled(scrollY > 50);
+      
+      // Esconder header totalmente após passar do Hero
+      setIsVisible(scrollY < heroHeight);
+    };
+    
     window.addEventListener("scroll", handleScroll, { passive: true });
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
@@ -46,81 +56,97 @@ export default function Navbar() {
       <header
         style={{
           position: "fixed",
-          top: 0,
+          top: isVisible ? 0 : "-100px",
           left: 0,
           right: 0,
           zIndex: 100,
-          transition: "all 0.4s cubic-bezier(0.16, 1, 0.3, 1)",
-          backgroundColor: scrolled ? "rgba(10, 20, 20, 0.7)" : "transparent",
-          backdropFilter: scrolled ? "blur(24px) saturate(180%)" : "none",
-          WebkitBackdropFilter: scrolled ? "blur(24px) saturate(180%)" : "none",
-          borderBottom: scrolled
-            ? "1px solid rgba(255, 255, 255, 0.08)"
-            : "1px solid transparent",
+          transition: "all 0.5s cubic-bezier(0.16, 1, 0.3, 1)",
+          backgroundColor: scrolled ? "rgba(10, 20, 20, 0.85)" : "transparent",
+          backdropFilter: scrolled ? "blur(20px)" : "none",
+          WebkitBackdropFilter: scrolled ? "blur(20px)" : "none",
+          opacity: isVisible ? 1 : 0,
+          borderBottom: scrolled ? "1px solid rgba(255, 255, 255, 0.08)" : "none",
         }}
       >
         <div
           style={{
             maxWidth: "1400px",
             margin: "0 auto",
-            padding: "0 32px",
-            display: "grid",
-            gridTemplateColumns: "1fr auto 1fr",
+            padding: "0 24px md:0 40px",
+            display: "flex",
             alignItems: "center",
-            height: scrolled ? "64px" : "80px",
-            transition: "height 0.4s cubic-bezier(0.16, 1, 0.3, 1)",
+            justifyContent: "space-between",
+            height: scrolled ? "70px" : "100px",
+            transition: "height 0.4s ease",
           }}
+          className="container-site"
         >
-          {/* Espaço esquerdo vazio */}
-          <div />
-
-          {/* Logo centralizado */}
-          <a
-            href="#inicio"
-            style={{
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              textDecoration: "none",
-              transition: "opacity 0.2s ease",
-            }}
-            onMouseEnter={(e) => (e.currentTarget.style.opacity = "0.75")}
-            onMouseLeave={(e) => (e.currentTarget.style.opacity = "1")}
-          >
+          {/* Logo */}
+          <a href="#inicio" className="flex items-center">
             <Image
               src="/Logo-H.svg"
               alt="LD Energy"
-              width={280}
-              height={80}
+              width={180}
+              height={50}
               priority
               style={{
-                height: scrolled ? "60px" : "90px",
+                height: scrolled ? "45px" : "60px",
                 width: "auto",
-                transition: "height 0.4s cubic-bezier(0.16, 1, 0.3, 1)",
+                transition: "height 0.4s ease",
                 filter: "brightness(0) invert(1)",
               }}
             />
           </a>
 
-          {/* Hamburger à direita */}
-          <div style={{ display: "flex", justifyContent: "flex-end" }}>
+          {/* Desktop Navigation */}
+          <nav className="hidden lg:flex items-center gap-10">
+            {navItems.slice(0, 5).map((item) => (
+              <a
+                key={item.href}
+                href={item.href}
+                className="text-[11px] uppercase tracking-[0.2em] font-medium text-white/70 hover:text-gold transition-colors"
+                style={{ fontFamily: "var(--font-body)" }}
+              >
+                {item.label}
+              </a>
+            ))}
+          </nav>
+
+          {/* Desktop Right Actions */}
+          <div className="flex items-center gap-6">
+            <a
+              href="#contato"
+              className="group hidden md:flex items-center gap-2.5 bg-gold rounded-[2px] text-dark font-bold text-[10.5px] uppercase tracking-[0.3em] transition-all duration-500 hover:shadow-[0_6px_30px_rgba(201,168,76,0.25)] hover:-translate-y-0.5 active:translate-y-0 border border-white/10 overflow-hidden relative leading-none"
+              style={{
+                background: "linear-gradient(105deg, #DFB957 0%, #C9A84C 45%, #CCAC53 55%, #B08D30 100%)",
+                padding: '14px 36px'
+              }}
+            >
+              <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000 ease-in-out" />
+              <span className="relative z-10">Falar com Especialista</span>
+              <svg 
+                width="13" 
+                height="13" 
+                viewBox="0 0 24 24" 
+                fill="none" 
+                stroke="currentColor" 
+                strokeWidth="4" 
+                strokeLinecap="round" 
+                strokeLinejoin="round"
+                className="relative z-10 transform group-hover:translate-x-1 transition-transform duration-500"
+              >
+                <path d="M5 12h14m-7-7 7 7-7 7" />
+              </svg>
+            </a>
+
+            {/* Hamburger (Mobile & Sidebar Toggle) */}
             <button
               onClick={() => setMenuOpen(true)}
               aria-label="Abrir menu"
-              style={{
-                background: "none",
-                border: "none",
-                cursor: "pointer",
-                padding: "10px",
-                display: "flex",
-                flexDirection: "column",
-                gap: "5px",
-                alignItems: "flex-end",
-              }}
+              className="lg:hidden p-2 flex flex-col gap-1.5 items-end"
             >
               <span style={lineStyle(24)} />
               <span style={lineStyle(16)} />
-              <span style={lineStyle(20)} />
             </button>
           </div>
         </div>
@@ -133,11 +159,11 @@ export default function Navbar() {
           position: "fixed",
           inset: 0,
           zIndex: 200,
-          backgroundColor: "rgba(0, 0, 0, 0.55)",
-          backdropFilter: "blur(4px)",
+          backgroundColor: "rgba(0, 0, 0, 0.7)",
+          backdropFilter: "blur(8px)",
           opacity: menuOpen ? 1 : 0,
           pointerEvents: menuOpen ? "auto" : "none",
-          transition: "opacity 0.45s cubic-bezier(0.16, 1, 0.3, 1)",
+          transition: "opacity 0.4s ease",
         }}
       />
 

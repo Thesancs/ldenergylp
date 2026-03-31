@@ -120,8 +120,8 @@ export default function Processo() {
         </div>
       </div>
       
-      {/* Massive Breathing Room Spacer */}
-      <div className="h-[50vh] w-full bg-white pointer-events-none" />
+      {/* Massive Breathing Room Spacer - Increased for more white space between sections */}
+      <div className="h-[75vh] w-full bg-white pointer-events-none" />
     </section>
   );
 }

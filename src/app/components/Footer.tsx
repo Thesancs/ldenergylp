@@ -76,7 +76,7 @@ export default function Footer() {
                 fontFamily: "var(--font-body)",
                 fontSize: "0.875rem",
                 lineHeight: 1.7,
-                color: "rgba(245, 240, 232, 0.45)",
+                color: "rgba(245, 240, 232, 0.75)",
                 fontWeight: 300,
                 maxWidth: "320px",
               }}
@@ -91,7 +91,7 @@ export default function Footer() {
           <div>
             <p
               className="text-eyebrow"
-              style={{ marginBottom: "20px", opacity: 0.5 }}
+              style={{ marginBottom: "20px", opacity: 0.8 }}
             >
               Navegação
             </p>
@@ -104,7 +104,7 @@ export default function Footer() {
                     display: "block",
                     fontFamily: "var(--font-body)",
                     fontSize: "0.875rem",
-                    color: "rgba(245, 240, 232, 0.55)",
+                    color: "rgba(245, 240, 232, 0.85)",
                     textDecoration: "none",
                     marginBottom: "12px",
                     transition: "color 0.2s ease",
@@ -113,7 +113,7 @@ export default function Footer() {
                     (e.currentTarget.style.color = "var(--color-gold)")
                   }
                   onMouseLeave={(e) =>
-                    (e.currentTarget.style.color = "rgba(245, 240, 232, 0.55)")
+                    (e.currentTarget.style.color = "rgba(245, 240, 232, 0.85)")
                   }
                 >
                   {item.label}
@@ -126,7 +126,7 @@ export default function Footer() {
           <div>
             <p
               className="text-eyebrow"
-              style={{ marginBottom: "20px", opacity: 0.5 }}
+              style={{ marginBottom: "20px", opacity: 0.8 }}
             >
               Contato
             </p>
@@ -144,7 +144,7 @@ export default function Footer() {
                 style={{
                   fontFamily: "var(--font-body)",
                   fontSize: "0.875rem",
-                  color: "rgba(245, 240, 232, 0.45)",
+                  color: "rgba(245, 240, 232, 0.75)",
                   marginBottom: "8px",
                   fontWeight: 300,
                 }}
@@ -171,7 +171,7 @@ export default function Footer() {
             style={{
               fontFamily: "var(--font-body)",
               fontSize: "0.75rem",
-              color: "rgba(245, 240, 232, 0.25)",
+              color: "rgba(245, 240, 232, 0.45)",
               letterSpacing: "0.02em",
             }}
           >
@@ -185,7 +185,7 @@ export default function Footer() {
                 style={{
                   fontFamily: "var(--font-body)",
                   fontSize: "0.75rem",
-                  color: "rgba(245, 240, 232, 0.25)",
+                  color: "rgba(245, 240, 232, 0.45)",
                   textDecoration: "none",
                   transition: "color 0.2s ease",
                 }}
@@ -193,7 +193,7 @@ export default function Footer() {
                   (e.currentTarget.style.color = "rgba(245, 240, 232, 0.55)")
                 }
                 onMouseLeave={(e) =>
-                  (e.currentTarget.style.color = "rgba(245, 240, 232, 0.25)")
+                  (e.currentTarget.style.color = "rgba(245, 240, 232, 0.45)")
                 }
               >
                 {item}
